@@ -147,8 +147,8 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 	cont = (t_cont *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
+		free_bs(cont);
 		mlx_terminate(cont->mlx);
-		/*free bs*/
 	}
 	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
 		move_up(cont);
@@ -225,11 +225,23 @@ void	collectibles(t_cont *cont, char **map)
 	collectibles2(cont, map);
 }
 
+void	free_bs(t_cont *cont)
+{
+	free(cont->collectibles->x);
+	free(cont->collectibles->y);
+	free(cont->collectibles->coll);
+	free(cont->collectibles);
+	free_map(cont->map);
+	free(*cont);
+}
+
 int	init(char **map)
 {
 	t_cont	cont;
 
+	cont = malloc(sizeof(t_cont));
 	sz(map, &cont);
+	cont.moves = 0;
 	cont.map = map;
 	cont.mlx = mlx_init(cont.p_width, cont.p_length, "so_long", true);
 	cont.img = mlx_new_image(cont.mlx, cont.p_width, cont.p_length);
@@ -238,6 +250,7 @@ int	init(char **map)
 	collectibles(&cont, map);
 	mlx_key_hook(cont.mlx, &my_keyhook, &cont);
 	mlx_loop(cont.mlx);
+	free_bs(&cont);
 	mlx_terminate(cont.mlx);
 	return (0);
 }

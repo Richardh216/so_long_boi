@@ -104,25 +104,21 @@ int	ft_check_map(char **map, int map_size)
 	return (1);
 }
 
-// void	free_map(char **map)
-// {
-// 	int	i;
-// 	int	j;
+void	free_map(char **map)
+{
+	int	i;
+	int	j;
 
-// 	j = 0;
-// 	i = 0;
-// 	while (map[j][i])
-// 	{
-// 		while (map[j][i])
-// 		{
-// 			free((void *)map[j][i]);
-// 			i++;
-// 		}
-// 		j++;
-// 	}
-// 	free(*map);
-// 	*map = NULL;
-// }
+	j = 0;
+	i = 0;
+	while (map[j])
+	{
+		free(map[j]);
+		j++;
+	}
+	free(map);
+	map = NULL;
+}
 
 void	ft_error(char *str, int flag)
 {

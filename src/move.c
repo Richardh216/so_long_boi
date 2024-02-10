@@ -25,6 +25,7 @@ void	move_up(t_cont *cont)
 		cont->map[cont->player_y][cont->player_x] = 'P';
 		rebuild_p(cont);
 		mlx_image_to_window(cont->mlx, cont->player, cont->player_x * 64, cont->player_y * 64);
+		print_moves(cont->moves);
 	}
 	if (cont->map[cont->coords_y - 1][cont->coords_x] == 'E' && !cont->c_n)
 	{
@@ -46,6 +47,7 @@ void	move_down(t_cont *cont)
 		cont->map[cont->player_y][cont->player_x] = 'P';
 		rebuild_p(cont);
 		mlx_image_to_window(cont->mlx, cont->player, cont->player_x * 64, cont->player_y * 64);
+		print_moves(cont->moves);
 	}
 	if (cont->map[cont->coords_y + 1][cont->coords_x] == 'E' && !cont->c_n)
 	{
@@ -67,6 +69,7 @@ void	move_left(t_cont *cont)
 		cont->map[cont->player_y][cont->player_x] = 'P';
 		rebuild_p(cont);
 		mlx_image_to_window(cont->mlx, cont->player, cont->player_x * 64, cont->player_y * 64);
+		print_moves(cont->moves);
 	}
 	if (cont->map[cont->coords_y][cont->coords_x - 1] == 'E' && !cont->c_n)
 	{
@@ -88,6 +91,7 @@ void	move_right(t_cont *cont)
 		cont->map[cont->player_y][cont->player_x] = 'P';
 		rebuild_p(cont);
 		mlx_image_to_window(cont->mlx, cont->player, cont->player_x * 64, cont->player_y * 64);
+		print_moves(cont->moves);
 	}
 	if (cont->map[cont->coords_y][cont->coords_x + 1] == 'E' && !cont->c_n)
 	{

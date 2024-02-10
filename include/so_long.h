@@ -45,6 +45,7 @@ typedef struct s_cont
 	int				player_y;
 	char			**map;
 	int				c_n;
+	int				moves;
 	int				all;
 	t_coll			*collectibles;
 	int				p_width;
