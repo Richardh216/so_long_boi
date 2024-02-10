@@ -6,7 +6,7 @@
 /*   By: rhorvath <rhorvath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 08:12:02 by rhorvath          #+#    #+#             */
-/*   Updated: 2024/01/30 06:54:47 by rhorvath         ###   ########.fr       */
+/*   Updated: 2024/02/10 16:35:57 by rhorvath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_check_map(char **map, int map_size);
 int	ft_check_fnl(char **map, int map_size);
 int	ft_check_borders(char **map, int map_size);
 int	ft_strlen(char *str);
-int	init(char **map);
+int	init(char **map, t_cont *cont);
 void	sz(char **map, t_cont *cont);
 void	build(t_cont *cont, char **map);
 void	build2(t_cont *cont, char **map);
@@ -94,6 +94,10 @@ void	move_up(t_cont *cont);
 void	move_down(t_cont *cont);
 void	move_left(t_cont *cont);
 void	move_right(t_cont *cont);
-// void	free_map(char **map);
+void	free_bs(t_cont *cont);
+void	free_map(char **map);
+void	print_moves(int moves);
+int	solvable(char **map);
+char	**map_copy(char **map);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rhorvath <rhorvath@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 17:45:23 by rhorvath          #+#    #+#             */
-/*   Updated: 2024/01/30 06:55:03 by rhorvath         ###   ########.fr       */
+/*   Updated: 2024/02/10 16:29:05 by rhorvath         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	build2(t_cont *cont, char **map)
 
 void	remove_c(t_cont *cont)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < cont->all)
@@ -80,7 +80,7 @@ void	remove_c(t_cont *cont)
 void	rebuild_p(t_cont *cont)
 {
 	xpm_t	*xpm;
-	
+
 	mlx_delete_image(cont->mlx, cont->player);
 	xpm = mlx_load_xpm42("textures/player_64.xpm42");
 	cont->player = mlx_texture_to_image(cont->mlx, &xpm->texture);
@@ -125,8 +125,8 @@ void	sz(char **map, t_cont *cont)
 	cont->p_length = i * 64;
 	cont->p_width = j * 64;
 	cont->c_n = 0;
-	i = -1;
-	while (map[++i])
+	i = 0;
+	while (map[i])
 	{
 		j = 0;
 		while (map[i][j])
@@ -135,8 +135,9 @@ void	sz(char **map, t_cont *cont)
 				cont->c_n++;
 			j++;
 		}
+		i++;
 	}
-	cont->c_n = cont->all;
+	cont->all = cont->c_n;
 }
 
 
@@ -146,10 +147,7 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 
 	cont = (t_cont *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-	{
-		free_bs(cont);
-		mlx_terminate(cont->mlx);
-	}
+		mlx_close_window(cont->mlx);
 	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
 		move_up(cont);
 	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
@@ -180,7 +178,7 @@ void	coll_alloc(t_cont *cont)
 	}
 }
 
-void	collectibles2(t_cont *cont, char **map)
+void	collectibles2(t_cont *cont)
 {
 	mlx_image_t	*img;
 	int			i;
@@ -222,35 +220,33 @@ void	collectibles(t_cont *cont, char **map)
 		}
 		i++;
 	}
-	collectibles2(cont, map);
+	collectibles2(cont);
 }
 
 void	free_bs(t_cont *cont)
 {
-	free(cont->collectibles->x);
-	free(cont->collectibles->y);
-	free(cont->collectibles->coll);
-	free(cont->collectibles);
+	if (cont->collectibles->coll)
+		free(cont->collectibles->coll);
+	if (cont->collectibles->x)
+		free(cont->collectibles->x);
+	if (cont->collectibles->y)
+		free(cont->collectibles->y);
+	if (cont->collectibles)
+		free(cont->collectibles);
 	free_map(cont->map);
-	free(*cont);
 }
 
-int	init(char **map)
+int	init(char **map, t_cont	*cont)
 {
-	t_cont	cont;
-
-	cont = malloc(sizeof(t_cont));
-	sz(map, &cont);
-	cont.moves = 0;
-	cont.map = map;
-	cont.mlx = mlx_init(cont.p_width, cont.p_length, "so_long", true);
-	cont.img = mlx_new_image(cont.mlx, cont.p_width, cont.p_length);
-	mlx_image_to_window(cont.mlx, cont.img, 0, 0);
-	build(&cont, map);
-	collectibles(&cont, map);
-	mlx_key_hook(cont.mlx, &my_keyhook, &cont);
-	mlx_loop(cont.mlx);
-	free_bs(&cont);
-	mlx_terminate(cont.mlx);
+	sz(map, cont);
+	cont->moves = 0;
+	cont->mlx = mlx_init(cont->p_width, cont->p_length, "so_long", true);
+	cont->img = mlx_new_image(cont->mlx, cont->p_width, cont->p_length);
+	mlx_image_to_window(cont->mlx, cont->img, 0, 0);
+	build(cont, map);
+	collectibles(cont, map);
+	mlx_key_hook(cont->mlx, &my_keyhook, (void *)cont);
+	mlx_loop(cont->mlx);
+	mlx_terminate(cont->mlx);
 	return (0);
 }
